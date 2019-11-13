@@ -11,11 +11,13 @@ app.use(parser.json());
 connection
     .authenticate()
         .then(() => {
+        connection.sync();
         console.log('Connection has been established successfully.');
     })
     .catch(err => {
         console.error('Unable to connect to the database:', err);
     });
+
 
 
 app.post('/favorite/:id', function (req, res) {
@@ -56,6 +58,23 @@ app.get('/profile/:id', function(req, res) {
     User.findAll({
         where: {
             id: id
+        }
+    })
+    .then(user => {
+        res.status(200).json(user);
+    });
+
+    
+});
+
+app.get('/profile/', function(req, res) {
+    const email = req.query.email;
+
+    console.log(email);
+
+    User.findAll({
+        where: {
+            email: email
         }
     })
     .then(user => {
