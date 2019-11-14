@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const connection = new Sequelize('mysql://root:my-secret@localhost:3306/profile_db');
+const connection = new Sequelize('mysql://root:my-secret@profile-db/profile_db');
 
 
 class User extends Sequelize.Model {}

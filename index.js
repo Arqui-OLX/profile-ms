@@ -55,7 +55,7 @@ app.post('/profile', function(req, res) {
 app.get('/profile/:id', function(req, res) {
     const id = req.params.id;
 
-    User.findAll({
+    User.findOne({
         where: {
             id: id
         }
@@ -67,12 +67,12 @@ app.get('/profile/:id', function(req, res) {
     
 });
 
-app.get('/profile/', function(req, res) {
+app.get('/profile', function(req, res) {
     const email = req.query.email;
 
     console.log(email);
 
-    User.findAll({
+    User.findOne({
         where: {
             email: email
         }
@@ -80,6 +80,7 @@ app.get('/profile/', function(req, res) {
     .then(user => {
         res.status(200).json(user);
     });
+
 
     
 });
