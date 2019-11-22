@@ -1,5 +1,14 @@
 version: "2"
 services:
+  profile-db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: profile
+      MYSQL_ROOT_PASSWORD: 'my-secret'
+    ports:
+    - "3307:3306"
+    labels:
+      io.rancher.scheduler.affinity:host_label: id=n2
   profile-ms:
     build: .
     ports:
@@ -8,17 +17,8 @@ services:
       - profile-db
     labels:
       io.rancher.scheduler.affinity:host_label: id=n2
-  profile-db:
-    image: mysql:5.7
-    environment:
-      MYSQL_DATABASE: profile_db
-      MYSQL_PASSWORD: 'my-secret'
-      MYSQL_ROOT_PASSWORD: 'my-secret'
-      MYSQL_USER: root
-    ports:
-    - 3307:3306/tcp
-    labels:
-      io.rancher.scheduler.affinity:host_label: id=n2
+
+
 
 
 

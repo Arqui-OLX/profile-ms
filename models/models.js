@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const connection = new Sequelize('mysql://root:my-secret@profile-db/profile_db');
+const connection = new Sequelize('mysql://root:my-secret@profile-db/profile');
 
 
 class User extends Sequelize.Model {}
@@ -10,8 +10,8 @@ User.init({
         allowNull: false
     },
     email: {
-        type: Sequelize.STRING
-        // allowNull defaults to true
+        type: Sequelize.STRING,
+        allowNull: false
     },
     phone: {
         type: Sequelize.STRING
