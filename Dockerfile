@@ -1,7 +1,7 @@
 FROM node:latest
 
 # Create app directory
-WORKDIR /usr/src/profile
+WORKDIR /usr/src/profile-ms
 
 
 # Install app dependencies

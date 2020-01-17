@@ -35,12 +35,87 @@ app.post('/favorite/:id', function (req, res) {
         
         .then((favorite) => {
 
-            user.addFavorite(favorite).then(() => {
+            user.addFavorite(favorite)
+            .then(() => {
                 res.status(200).json(favorite);
-            });
-        });
+            })
+
+            .catch(err => {
+                res.status(500).send(false);
+            });   
+
+        })
+        .catch(err => {
+            res.status(500).send(false);
+        });        
+
     });
     
+});
+
+
+app.get('/favorite/:id', function (req, res) {
+
+    const id = req.params.id;
+
+    User.findOne({
+        where: {
+            id: id
+        }
+    })
+    .then(user => {
+
+        user.getFavorites()
+        .then(favorites => {
+            res.status(200).json(favorites);
+        })
+
+        .catch(err => {
+            res.status(500).send(false);
+        });  
+
+    })
+    .catch(err => {
+        res.status(500).send(false);
+    }); 
+    
+});
+
+app.delete('/favorite', function(req, res) {
+
+
+    User.findOne({
+        where: {
+            id: parseInt(req.query.id_profile)
+        }
+    })
+    .then(user => {
+        user.getFavorites({
+            where: { fk_post: req.query.fk_post }
+        })
+        .then(favorites => {
+            favorites[0].destroy()
+            .then((favorite) => {
+                res.status(200).json(true);
+            })
+            .catch(err => {
+                res.status(500).send(false);
+            });
+           
+        })
+
+        .catch(err => {
+            res.status(500).send(false);
+        });
+
+    })
+    .catch(err => {
+        res.status(500).send(false);
+    });  
+
+
+    
+
 });
 
 app.post('/profile', function(req, res) {
@@ -48,7 +123,10 @@ app.post('/profile', function(req, res) {
     User.create(req.body)
     .then(user => {
         res.status(200).json(user);
-    });
+    })
+    .catch(err => {
+        res.status(500).send(false);
+    });  
 
 });
 
@@ -62,10 +140,47 @@ app.get('/profile/:id', function(req, res) {
     })
     .then(user => {
         res.status(200).json(user);
-    });
+    })
+    .catch(err => {
+        res.status(500).send(false);
+    });  
 
     
 });
+
+app.get('/isFavorite', function(req, res) {
+
+    User.findOne({
+        where: {
+            id: parseInt(req.query.id_profile)
+        }
+    })
+    .then(user => {
+
+        user.getFavorites({
+            where: { fk_post: req.query.fk_post }
+        })
+        .then(favorites => {
+            if (favorites.length > 0) {
+                res.status(200).send(true);
+            } else {
+                res.status(500).send(false);            
+            }
+           
+        })
+
+        .catch(err => {
+            res.status(500).send(false);
+        });
+
+    })
+    .catch(err => {
+        res.status(500).send(false);
+    });  
+
+    
+});
+
 
 app.get('/profile', function(req, res) {
     const email = req.query.email;
@@ -79,7 +194,10 @@ app.get('/profile', function(req, res) {
     })
     .then(user => {
         res.status(200).json(user);
-    });
+    })
+    .catch(err => {
+        res.status(500).send(false);
+    });  
 
 
     
@@ -108,7 +226,10 @@ app.put('/profile/:id', function(req, res) {
         }
     }).then((user) => {
         res.status(200).json(user);
-    });
+    })
+    .catch(err => {
+        res.status(500).send(false);
+    });  
 
 });
 

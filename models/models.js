@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const connection = new Sequelize('mysql://root:my-secret@profile-db/profile');
+const connection = new Sequelize('mysql://root:secret@profile-db/profile');
 
 
 class User extends Sequelize.Model {}
@@ -28,10 +28,26 @@ User.init({
 class Favorite extends Sequelize.Model {}
 Favorite.init({
     // attributes
+
+    userId: {
+        unique: 'compositeIndex',
+        type: Sequelize.INTEGER,
+
+       references: {
+         // This is a reference to another model
+         model: User,
+
+         // This is the column name of the referenced model
+         key: 'id'
+       }
+    },
+
     fk_post: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: 'compositeIndex'
     }
+
     }, {
     sequelize: connection,
     modelName: 'favorite',
@@ -40,7 +56,8 @@ Favorite.init({
 });
 
 User.hasMany(Favorite); // Will add userId to Favorite model
-Favorite.belongsTo(User, {foreignKey: 'fk_user'}); // Will also add userId to Favorite model
+Favorite.belongsTo(User); // Will also add userId to Favorite model
+
 
 
 
